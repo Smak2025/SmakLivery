@@ -90,7 +90,6 @@ namespace SmakLivery
                     CourierId = await reader.IsDBNullAsync(3) ? null : reader.GetInt64(3)
                 });
             }
-            MessageBox.Show(orders.ToString());
             return orders;
         }
     }
