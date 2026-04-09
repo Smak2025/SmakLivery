@@ -10,17 +10,17 @@ namespace SmakLivery
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        private ObservableCollection<Order> orders { get; } = new ObservableCollection<Order>();
+        public ObservableCollection<Order> Orders { get; } = new ObservableCollection<Order>();
 
         public async Task LoadOrdersAsync()
         {
             try
             {
                 var data = await DbHelper.GetOrders();
-                orders.Clear();
+                Orders.Clear();
                 foreach (var order in data)
                 {
-                    orders.Add(order);
+                    Orders.Add(order);
                 }
             }
             catch { }

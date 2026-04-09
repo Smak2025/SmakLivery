@@ -7,9 +7,22 @@
         mc:Ignorable="d"
 		Loaded="Window_Loaded"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-		<DataGrid ItemsSource="{Binding Orders}">
-			
-		</DataGrid>
-    </Grid>
+
+	<Window.Resources>
+		<local:OrderEnumDisplayConverter x:Key="OrderEnumDisplayConverter"/>
+	</Window.Resources>
+	
+	
+	<Grid>
+		<ListView ItemsSource="{Binding Orders}">
+			<ListView.View>
+				<GridView>
+					<GridViewColumn Header="ID" DisplayMemberBinding="{Binding Id}"/>
+					<GridViewColumn Header="Адрес" DisplayMemberBinding="{Binding Address}"/>
+					<GridViewColumn Header="Статус" DisplayMemberBinding="{Binding Status, Converter={StaticResource OrderEnumDisplayConverter}}"/>
+					<GridViewColumn Header="Курьер" DisplayMemberBinding="{Binding CourierId}"/>
+				</GridView>
+			</ListView.View>
+		</ListView>
+	</Grid>
 </Window>

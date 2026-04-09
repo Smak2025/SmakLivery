@@ -1,12 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace SmakLivery
 {
     public enum OrderStatus
     {
-        Accepted, Prepearing, OnTheWay, Delivered, Cancelled
+        [Display(Name = "Смачно принят")]
+        Accepted,
+        [Display(Name = "Смачно готовим заказ")]
+        Preparing,
+        [Display(Name = "Во смачном пути")]
+        OutForDelivery,
+        [Display(Name = "Смакуйте полученный заказ!")]
+        Delivered,
+        [Display(Name = "Антисмачно отменен")]
+        Cancelled
     }
 
     public class Order
