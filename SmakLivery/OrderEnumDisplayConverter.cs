@@ -12,7 +12,7 @@ namespace SmakLivery
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is not Enum e) return value;
+            if (value is not OrderStatus e) return value;
 
             var field = e.GetType().GetField(e.ToString());
             var attr = field?.GetCustomAttribute<DisplayAttribute>();

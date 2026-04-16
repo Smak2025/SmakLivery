@@ -11,6 +11,21 @@ namespace SmakLivery
     public class MainViewModel : INotifyPropertyChanged
     {
         public ObservableCollection<Order> Orders { get; } = new ObservableCollection<Order>();
+        private RelayCommand deleteOrder;
+        public RelayCommand DeleteOrder => deleteOrder;
+
+        public MainViewModel()
+        {
+            deleteOrder = new RelayCommand(async (o) => await DeleteOrderCommand(o));
+        }
+        private async Task DeleteOrderCommand(object p)
+        {
+            if (p is Order order)
+            {
+                await DbHelper.DeleteOrderByIdAsync(order.Id);
+                Orders.Remove(order);
+            }
+        }
 
         public async Task LoadOrdersAsync()
         {

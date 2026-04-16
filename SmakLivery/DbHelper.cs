@@ -9,10 +9,10 @@ namespace SmakLivery
 {
     public static class DbHelper
     {
-        //private static string connStr = "Host=localhost;Username=postgres;Password=postgres;Database=smaklivery";
+        private static string connStr = "Host=localhost;Username=postgres;Password=postgres;Database=smaklivery";
         // Для маппинга ENUM из БД в C# и наоборот
         private static readonly NpgsqlDataSource _ds =
-            new NpgsqlDataSourceBuilder("Host=localhost;Username=postgres;Password=postgres;Database=smaklivery")
+            new NpgsqlDataSourceBuilder(connStr)
                 .MapEnum<OrderStatus>("order_status") // Маппинг типов!!!
                 .Build();
         public static async Task CreateDbAsync()
@@ -92,5 +92,15 @@ namespace SmakLivery
             }
             return orders;
         }
+        public static async Task DeleteOrderByIdAsync(long orderId)
+        {
+            var query = "DELETE FROM \"order\" WHERE Id=@Id;";
+            await using var conn = _ds.CreateConnection();
+            await conn.OpenAsync();
+            await using var cmd = new NpgsqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@id", orderId);
+            await cmd.ExecuteNonQueryAsync();
+        }
+
     }
 }
