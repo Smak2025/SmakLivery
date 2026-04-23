@@ -13,18 +13,28 @@ namespace SmakLivery
         public ObservableCollection<Order> Orders { get; } = new ObservableCollection<Order>();
         private RelayCommand deleteOrder;
         public RelayCommand DeleteOrder => deleteOrder;
+        public RelayCommand AddOrder { get; init; }
 
         public MainViewModel()
         {
-            deleteOrder = new RelayCommand(async (o) => await DeleteOrderCommand(o));
-        }
-        private async Task DeleteOrderCommand(object p)
-        {
-            if (p is Order order)
-            {
-                await DbHelper.DeleteOrderByIdAsync(order.Id);
-                Orders.Remove(order);
-            }
+            AddOrder = new RelayCommand(
+                async (o) =>
+                {
+                    var order = new Order() { Address = "Какой-то адрес" };
+                    var addWnd = new AddOrEditWindow(order);
+                    addWnd.ShowDialog();
+                }
+            );
+            deleteOrder = new RelayCommand(
+                async (o) => {
+                    if (o is Order order)
+                    {
+                        await DbHelper.DeleteOrderByIdAsync(order.Id);
+                        Orders.Remove(order);
+                    }
+                },
+                (o) => { return o is Order; }
+            );
         }
 
         public async Task LoadOrdersAsync()

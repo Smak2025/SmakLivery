@@ -48,30 +48,6 @@ namespace SmakLivery
                 await cmd2.ExecuteNonQueryAsync();
         }
 
-        //private static OrderStatus GetOrderStatusFrom(string statusName)
-        //{
-        //    return statusName switch
-        //    {
-        //        "Отменен" => OrderStatus.Cancelled,
-        //        "Готовится" => OrderStatus.Prepearing,
-        //        "Передан курьеру" => OrderStatus.OutForDelivery,
-        //        "Получен" => OrderStatus.Delivered,
-        //        _ => OrderStatus.Accepted
-        //    };
-        //}
-
-        //private static string GetStatusNameFrom(OrderStatus status)
-        //{
-        //    return status switch
-        //    {
-        //        OrderStatus.Cancelled => "Отменен",
-        //        OrderStatus.Prepearing => "Готовится",
-        //        OrderStatus.OutForDelivery => "Передан курьеру",
-        //        OrderStatus.Delivered => "Получен",
-        //        _ => "Принят"
-        //    };
-        //}
-
         public static async Task<List<Order>> GetOrders()
         {
             var orders = new List<Order>();
@@ -101,6 +77,19 @@ namespace SmakLivery
             cmd.Parameters.AddWithValue("@id", orderId);
             await cmd.ExecuteNonQueryAsync();
         }
+        public static async Task AddOrderAsync(Order order)
+        {
+            var query = "INSERT INTO \"order\" (address,status) VALUES (@Address,@Status) RETURING Id;";
+            await using var conn = _ds.CreateConnection();
+            await conn.OpenAsync();
+            await using var cmd = new NpgsqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@Address", order.Address);
+            cmd.Parameters.AddWithValue("@Status", order.Status);
+            long? id = (long?)await cmd.ExecuteScalarAsync();
+            order.Id = id??0L;
+        }
+
+
 
     }
 }
