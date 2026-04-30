@@ -12,8 +12,11 @@ namespace SmakLivery
     {
         public ObservableCollection<Order> Orders { get; } = new ObservableCollection<Order>();
         private RelayCommand deleteOrder;
+        
         public RelayCommand DeleteOrder => deleteOrder;
         public RelayCommand AddOrder { get; init; }
+        public RelayCommand EditOrder { get; init; }
+        public Order? SelectedOrder { get; set; }
 
         public MainViewModel()
         {
@@ -23,7 +26,24 @@ namespace SmakLivery
                     var order = new Order() { Address = "Какой-то адрес" };
                     var addWnd = new AddOrEditWindow(order);
                     addWnd.ShowDialog();
+                    if (addWnd.ResultOk)
+                    {
+                        await LoadOrdersAsync();
+                    }
                 }
+            );
+            EditOrder = new RelayCommand(
+                async (o) =>
+                {
+                    //var order = new Order() { Address = "Какой-то адрес" };
+                    var addWnd = new AddOrEditWindow(SelectedOrder);
+                    addWnd.ShowDialog();
+                    if (addWnd.ResultOk)
+                    {
+                        await LoadOrdersAsync();
+                    }
+                },
+                (o) => SelectedOrder is not null
             );
             deleteOrder = new RelayCommand(
                 async (o) => {

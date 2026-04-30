@@ -7,6 +7,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
@@ -18,6 +19,7 @@ namespace SmakLivery
     public partial class AddOrEditWindow : Window
     {
         private AddEditViewModel viewModel;
+        public bool ResultOk { get; private set; } = false;
         public AddOrEditWindow(Order order)
         {
             viewModel = new AddEditViewModel(order);
@@ -29,7 +31,8 @@ namespace SmakLivery
         private void Save_Click(object sender, RoutedEventArgs e)
         {
             viewModel.SaveCommand.Execute(null);
-
+            ResultOk = true;
+            Close();
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)

@@ -14,13 +14,17 @@
 	
 	
 	<Grid>
-		<ListView ItemsSource="{Binding Orders}" x:Name="OrdersList" IsSynchronizedWithCurrentItem="True">
+		<ListView ItemsSource="{Binding Orders}" SelectionMode="Single" 
+				  SelectedItem="{Binding SelectedOrder}" x:Name="OrdersList">
 			<ListView.ContextMenu>
 				<ContextMenu>
 					<!-- Command: Элемент, где расположен ContextMenu. Его контекст данных.Команда, Относительный источник: Предок типа = ContextMenu  -->
 					<MenuItem Header="Новый заказ"
 							  Command="{Binding PlacementTarget.DataContext.AddOrder, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
 				    />
+					<MenuItem Header="Редактировать заказ"
+					  Command="{Binding PlacementTarget.DataContext.EditOrder, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+/>
 					<MenuItem Header="Удалить" 
 							    Command="{Binding PlacementTarget.DataContext.DeleteOrder, RelativeSource={RelativeSource AncestorType=ContextMenu}}" 
 								CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>

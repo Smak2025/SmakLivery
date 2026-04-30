@@ -6,7 +6,7 @@
 		xmlns:sys="clr-namespace:System;assembly=System.Runtime"
         xmlns:local="clr-namespace:SmakLivery"
         mc:Ignorable="d"
-        Title="AddOrEditWindow" Height="400" Width="600">
+        Title="AddOrEditWindow" Height="435" Width="600">
 	<Window.Resources>
 		<!-- Увеличенный шрифт для всех TextBlock -->
 		<Style TargetType="TextBlock">
@@ -85,7 +85,7 @@
             Click="Cancel_Click"
             IsCancel="True"/>
 
-		<Button Content="Смачно создать заказ" 
+			<Button Content="{Binding SaveButtonText}" 
             Click="Save_Click"
             IsDefault="True"
             FontWeight="Bold"/>

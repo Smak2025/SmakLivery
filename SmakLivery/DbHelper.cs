@@ -51,7 +51,7 @@ namespace SmakLivery
         public static async Task<List<Order>> GetOrders()
         {
             var orders = new List<Order>();
-            var query = "SELECT * FROM \"order\";";
+            var query = "SELECT * FROM \"order\" ORDER BY id;";
             await using var conn = _ds.CreateConnection();
             await conn.OpenAsync();
             await using var cmd = new NpgsqlCommand(query, conn);
@@ -79,7 +79,7 @@ namespace SmakLivery
         }
         public static async Task AddOrderAsync(Order order)
         {
-            var query = "INSERT INTO \"order\" (address,status) VALUES (@Address,@Status) RETURING Id;";
+            var query = "INSERT INTO \"order\" (address,status) VALUES (@Address,@Status) RETURNING Id;";
             await using var conn = _ds.CreateConnection();
             await conn.OpenAsync();
             await using var cmd = new NpgsqlCommand(query, conn);
@@ -87,6 +87,21 @@ namespace SmakLivery
             cmd.Parameters.AddWithValue("@Status", order.Status);
             long? id = (long?)await cmd.ExecuteScalarAsync();
             order.Id = id??0L;
+        }
+        public static async Task EditOrderAsync(Order order)
+        {
+            var cid = (order.CourierId is not null) ? ", courier_id = @CourierId" : "";
+            var query = "UPDATE \"order\" SET address = @Address,status = @Status"+cid+" WHERE id = @Id;";
+            await using var conn = _ds.CreateConnection();
+            await conn.OpenAsync();
+            await using var cmd = new NpgsqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@Address", order.Address);
+            cmd.Parameters.AddWithValue("@Status", order.Status);
+            if (order.CourierId is not null)
+                cmd.Parameters.AddWithValue("@CourierId", order.CourierId);
+            cmd.Parameters.AddWithValue("@Id", order.Id);
+            await cmd.ExecuteNonQueryAsync();
+            
         }
 
 
