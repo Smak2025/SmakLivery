@@ -35,7 +35,8 @@
 					<GridViewColumn Header="ID" DisplayMemberBinding="{Binding Id}"/>
 					<GridViewColumn Header="Адрес" DisplayMemberBinding="{Binding Address}"/>
 					<GridViewColumn Header="Статус" DisplayMemberBinding="{Binding Status, Converter={StaticResource OrderEnumDisplayConverter}}"/>
-					<GridViewColumn Header="Курьер" DisplayMemberBinding="{Binding CourierId}"/>
+					<GridViewColumn Header="ФИО " DisplayMemberBinding="{Binding CourierName}"/>
+					<GridViewColumn Header="Транспорт" DisplayMemberBinding="{Binding Transport}"/>
 				</GridView>
 			</ListView.View>
 		</ListView>

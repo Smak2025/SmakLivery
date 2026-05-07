@@ -10,13 +10,13 @@ namespace SmakLivery
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<Order> Orders { get; } = new ObservableCollection<Order>();
+        public ObservableCollection<OrderWithCourier> Orders { get; } = new ObservableCollection<OrderWithCourier>();
         private RelayCommand deleteOrder;
         
         public RelayCommand DeleteOrder => deleteOrder;
         public RelayCommand AddOrder { get; init; }
         public RelayCommand EditOrder { get; init; }
-        public Order? SelectedOrder { get; set; }
+        public OrderWithCourier? SelectedOrder { get; set; }
 
         public MainViewModel()
         {
@@ -36,7 +36,8 @@ namespace SmakLivery
                 async (o) =>
                 {
                     //var order = new Order() { Address = "Какой-то адрес" };
-                    var addWnd = new AddOrEditWindow(SelectedOrder);
+                    
+                    var addWnd = new AddOrEditWindow(SelectedOrder?.ToOrder()?? new Order());
                     addWnd.ShowDialog();
                     if (addWnd.ResultOk)
                     {
@@ -47,7 +48,7 @@ namespace SmakLivery
             );
             deleteOrder = new RelayCommand(
                 async (o) => {
-                    if (o is Order order)
+                    if (o is OrderWithCourier order)
                     {
                         await DbHelper.DeleteOrderByIdAsync(order.Id);
                         Orders.Remove(order);
@@ -77,4 +78,6 @@ namespace SmakLivery
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
+
+   
 }
